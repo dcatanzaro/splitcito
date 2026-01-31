@@ -7,6 +7,8 @@ import { Home, Plus, ArrowLeft } from "lucide-react";
 export function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const isGroupPage = pathname.startsWith("/groups/") && pathname.split("/").length >= 3;
+  const groupId = isGroupPage ? pathname.split("/")[2] : null;
 
   return (
     <header className="sticky top-0 z-50 bg-slate-900 text-white shadow-lg">
@@ -37,7 +39,7 @@ export function Header() {
             <Home className="h-5 w-5" />
           </Link>
           <Link
-            href="/groups/new"
+            href={groupId ? `/groups/${groupId}/expenses/new` : "/groups/new"}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-white transition-colors hover:bg-emerald-600"
           >
             <Plus className="h-5 w-5" />

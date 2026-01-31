@@ -108,7 +108,7 @@ export default function GroupPageClient() {
         </div>
       </div>
 
-      <div className="mb-6 flex gap-2 border-b border-slate-200">
+      <div className="mb-6 flex gap-0 overflow-x-auto border-b border-slate-200 scrollbar-hide">
         {[
           { id: "dashboard", label: "Dashboard", icon: BarChart3 },
           { id: "expenses", label: "Expenses", icon: Receipt },
@@ -117,7 +117,7 @@ export default function GroupPageClient() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as Tab)}
-            className={`flex items-center gap-2 border-b-2 px-4 py-3 font-medium transition-colors ${
+            className={`flex shrink-0 items-center gap-1 border-b-2 px-3 py-3 font-medium transition-colors ${
               activeTab === tab.id
                 ? "border-emerald-500 text-emerald-600"
                 : "border-transparent text-slate-600 hover:text-slate-900"
