@@ -267,7 +267,7 @@ export default function NewExpensePage() {
                 />
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <label className="mb-2 block text-sm font-medium text-slate-700">
                   Date
                 </label>
@@ -275,7 +275,7 @@ export default function NewExpensePage() {
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full min-w-0 rounded-lg border border-slate-300 px-4 py-3 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                   required
                 />
               </div>
