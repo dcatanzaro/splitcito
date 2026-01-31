@@ -31,3 +31,35 @@ select {
   background-color: white;
   color: #171717;
 }
+
+/* iOS date input fixes */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Prevent iOS date input from overflowing */
+.date-input-mobile {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  input[type="date"] {
+    font-size: 16px;
+    /* Prevents zoom on iOS */
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  @media (min-width: 640px) {
+    input[type="date"] {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+}

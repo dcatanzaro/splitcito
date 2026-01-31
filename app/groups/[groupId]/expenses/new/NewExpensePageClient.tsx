@@ -60,7 +60,7 @@ export default function NewExpensePage() {
             personId: p.id,
             value: "",
             amountMinor: 0,
-          }))
+          })),
         );
       }
     } catch (error) {
@@ -75,7 +75,9 @@ export default function NewExpensePage() {
       return;
     }
 
-    const selectedPersons = splits.filter((s) => s.value !== "0" && s.value !== "");
+    const selectedPersons = splits.filter(
+      (s) => s.value !== "0" && s.value !== "",
+    );
 
     if (splitMethod === "equal") {
       const count = selectedPersons.length || persons.length;
@@ -86,30 +88,29 @@ export default function NewExpensePage() {
         prev.map((s, index) => ({
           ...s,
           value: "",
-          amountMinor:
-            index < remainder ? perPerson + 1 : perPerson,
-        }))
+          amountMinor: index < remainder ? perPerson + 1 : perPerson,
+        })),
       );
     } else if (splitMethod === "exact") {
       setSplits((prev) =>
         prev.map((s) => ({
           ...s,
           amountMinor: Math.round(parseFloat(s.value || "0") * 100),
-        }))
+        })),
       );
     } else if (splitMethod === "percentage") {
       const totalPercentage = selectedPersons.reduce(
         (sum, s) => sum + parseFloat(s.value || "0"),
-        0
+        0,
       );
       if (totalPercentage > 0) {
         setSplits((prev) =>
           prev.map((s) => ({
             ...s,
             amountMinor: Math.round(
-              (parseFloat(s.value || "0") / 100) * amountMinor
+              (parseFloat(s.value || "0") / 100) * amountMinor,
             ),
-          }))
+          })),
         );
       }
     }
@@ -117,7 +118,7 @@ export default function NewExpensePage() {
 
   function updateSplitValue(personId: string, value: string) {
     setSplits((prev) =>
-      prev.map((s) => (s.personId === personId ? { ...s, value } : s))
+      prev.map((s) => (s.personId === personId ? { ...s, value } : s)),
     );
   }
 
@@ -152,7 +153,9 @@ export default function NewExpensePage() {
 
     const splitDiff = getSplitDifference();
     if (Math.abs(splitDiff) > 1) {
-      setError(`Split amounts don't add up. Difference: ${(splitDiff / 100).toFixed(2)}`);
+      setError(
+        `Split amounts don't add up. Difference: ${(splitDiff / 100).toFixed(2)}`,
+      );
       return;
     }
 
@@ -207,8 +210,12 @@ export default function NewExpensePage() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-12 text-center">
         <Receipt className="mx-auto mb-4 h-12 w-12 text-slate-400" />
-        <p className="mb-2 text-lg font-medium text-slate-900">No members yet</p>
-        <p className="mb-6 text-slate-500">Add members to the group before creating expenses</p>
+        <p className="mb-2 text-lg font-medium text-slate-900">
+          No members yet
+        </p>
+        <p className="mb-6 text-slate-500">
+          Add members to the group before creating expenses
+        </p>
         <Link
           href={`/groups/${groupId}`}
           className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white"
@@ -250,8 +257,8 @@ export default function NewExpensePage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
+              <div className="min-w-0">
                 <label className="mb-2 block text-sm font-medium text-slate-700">
                   Amount ({group.currency})
                 </label>
@@ -262,12 +269,12 @@ export default function NewExpensePage() {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full rounded-lg border border-slate-300 px-2 py-3 sm:px-4 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                   required
                 />
               </div>
 
-              <div className="min-w-0">
+              <div className="min-w-0 overflow-hidden">
                 <label className="mb-2 block text-sm font-medium text-slate-700">
                   Date
                 </label>
@@ -275,7 +282,7 @@ export default function NewExpensePage() {
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full min-w-0 rounded-lg border border-slate-300 px-4 py-3 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="date-input-mobile w-full min-w-0 rounded-lg border border-slate-300 px-2 py-3 sm:px-4 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                   required
                 />
               </div>
@@ -302,7 +309,9 @@ export default function NewExpensePage() {
         </div>
 
         <div className="rounded-xl bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-slate-900">Split Method</h2>
+          <h2 className="mb-4 text-lg font-semibold text-slate-900">
+            Split Method
+          </h2>
 
           <div className="mb-4 flex gap-2">
             {[
@@ -333,7 +342,9 @@ export default function NewExpensePage() {
                   key={person.id}
                   className="flex items-center justify-between rounded-lg bg-slate-50 p-3"
                 >
-                  <span className="font-medium text-slate-900">{person.name}</span>
+                  <span className="font-medium text-slate-900">
+                    {person.name}
+                  </span>
                   <div className="flex items-center gap-2">
                     {splitMethod !== "equal" && (
                       <input
@@ -344,7 +355,9 @@ export default function NewExpensePage() {
                         onChange={(e) =>
                           updateSplitValue(person.id, e.target.value)
                         }
-                        placeholder={splitMethod === "percentage" ? "%" : "0.00"}
+                        placeholder={
+                          splitMethod === "percentage" ? "%" : "0.00"
+                        }
                         className="w-24 rounded border border-slate-300 px-3 py-1 text-right focus:border-emerald-500 focus:outline-none"
                       />
                     )}
