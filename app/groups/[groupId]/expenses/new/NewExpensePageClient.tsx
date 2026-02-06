@@ -13,6 +13,7 @@ interface SplitEntry {
   personId: string;
   value: string;
   amountMinor: number;
+  selected: boolean;
 }
 
 export default function NewExpensePage() {
@@ -43,7 +44,7 @@ export default function NewExpensePage() {
 
   useEffect(() => {
     calculateSplits();
-  }, [amount, splitMethod, splits.map((s) => s.value).join(",")]);
+  }, [amount, splitMethod, splits.map((s) => `${s.value}:${s.selected}`).join(",")]);
 
   async function loadData() {
     try {
@@ -60,6 +61,7 @@ export default function NewExpensePage() {
             personId: p.id,
             value: "",
             amountMinor: 0,
+            selected: true,
           })),
         );
       }
@@ -75,12 +77,10 @@ export default function NewExpensePage() {
       return;
     }
 
-    const selectedPersons = splits.filter(
-      (s) => s.value !== "0" && s.value !== "",
-    );
+    const selectedPersons = splits.filter((s) => s.selected);
 
     if (splitMethod === "equal") {
-      const count = selectedPersons.length || persons.length;
+      const count = selectedPersons.length || 1;
       const perPerson = Math.floor(amountMinor / count);
       const remainder = amountMinor - perPerson * count;
 
@@ -88,14 +88,20 @@ export default function NewExpensePage() {
         prev.map((s, index) => ({
           ...s,
           value: "",
-          amountMinor: index < remainder ? perPerson + 1 : perPerson,
+          amountMinor: s.selected
+            ? index < remainder
+              ? perPerson + 1
+              : perPerson
+            : 0,
         })),
       );
     } else if (splitMethod === "exact") {
       setSplits((prev) =>
         prev.map((s) => ({
           ...s,
-          amountMinor: Math.round(parseFloat(s.value || "0") * 100),
+          amountMinor: s.selected
+            ? Math.round(parseFloat(s.value || "0") * 100)
+            : 0,
         })),
       );
     } else if (splitMethod === "percentage") {
@@ -107,9 +113,9 @@ export default function NewExpensePage() {
         setSplits((prev) =>
           prev.map((s) => ({
             ...s,
-            amountMinor: Math.round(
-              (parseFloat(s.value || "0") / 100) * amountMinor,
-            ),
+            amountMinor: s.selected
+              ? Math.round((parseFloat(s.value || "0") / 100) * amountMinor)
+              : 0,
           })),
         );
       }
@@ -119,6 +125,14 @@ export default function NewExpensePage() {
   function updateSplitValue(personId: string, value: string) {
     setSplits((prev) =>
       prev.map((s) => (s.personId === personId ? { ...s, value } : s)),
+    );
+  }
+
+  function togglePersonSelected(personId: string) {
+    setSplits((prev) =>
+      prev.map((s) =>
+        s.personId === personId ? { ...s, selected: !s.selected } : s,
+      ),
     );
   }
 
@@ -340,13 +354,25 @@ export default function NewExpensePage() {
               return (
                 <div
                   key={person.id}
-                  className="flex items-center justify-between rounded-lg bg-slate-50 p-3"
+                  className={`flex items-center justify-between rounded-lg p-3 ${
+                    split?.selected
+                      ? "bg-slate-50"
+                      : "bg-slate-100 opacity-60"
+                  }`}
                 >
-                  <span className="font-medium text-slate-900">
-                    {person.name}
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={split?.selected ?? true}
+                      onChange={() => togglePersonSelected(person.id)}
+                      className="h-5 w-5 cursor-pointer rounded border-slate-300 text-emerald-500 focus:ring-emerald-500"
+                    />
+                    <span className="font-medium text-slate-900">
+                      {person.name}
+                    </span>
+                  </div>
                   <div className="flex items-center gap-2">
-                    {splitMethod !== "equal" && (
+                    {splitMethod !== "equal" && split?.selected && (
                       <input
                         type="number"
                         step={splitMethod === "percentage" ? "1" : "0.01"}
