@@ -101,7 +101,7 @@ export default function HomePage() {
               
               <button
                 onClick={() => deleteGroup(group.id)}
-                className="ml-2 flex h-10 w-10 items-center justify-center rounded-full text-slate-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-500 group-hover:opacity-100"
+                className="ml-2 flex h-10 w-10 items-center justify-center rounded-full text-slate-400 opacity-100 transition-all hover:bg-red-50 hover:text-red-500 sm:opacity-0 sm:group-hover:opacity-100"
               >
                 <Trash2 className="h-5 w-5" />
               </button>

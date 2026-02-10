@@ -67,7 +67,7 @@ export function ExpensesTab({ group, persons, expenses, onRefresh }: ExpensesTab
                 <div className="flex-1">
                   <p className="font-semibold text-slate-900">{expense.description}</p>
                   <p className="text-sm text-slate-500">
-                    Paid by {personMap.get(expense.paidByPersonId) || "Unknown"} • {new Date(expense.date).toLocaleDateString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}
+                    Paid by {personMap.get(expense.paidByPersonId) || "Unknown"} • {new Date(expense.createdAt).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -84,7 +84,7 @@ export function ExpensesTab({ group, persons, expenses, onRefresh }: ExpensesTab
                       </Link>
                       <button
                         onClick={() => deleteExpense(expense.id)}
-                        className="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-500 group-hover:opacity-100"
+                        className="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 opacity-100 transition-all hover:bg-red-50 hover:text-red-500 sm:opacity-0 sm:group-hover:opacity-100"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>

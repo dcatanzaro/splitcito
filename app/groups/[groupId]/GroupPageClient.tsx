@@ -34,7 +34,7 @@ export default function GroupPageClient() {
       const [groupData, personsData, expensesData] = await Promise.all([
         db.groups.get(groupId),
         db.persons.where("groupId").equals(groupId).toArray(),
-        db.expenses.where("groupId").equals(groupId).reverse().sortBy("date"),
+        db.expenses.where("groupId").equals(groupId).reverse().sortBy("createdAt"),
       ]);
 
       if (groupData) {

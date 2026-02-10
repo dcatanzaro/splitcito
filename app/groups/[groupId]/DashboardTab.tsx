@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRightLeft, Check, Copy, Lock, MessageCircle } from "lucide-react";
+import { ArrowRightLeft, Check, Copy, FileText, Lock, MessageCircle } from "lucide-react";
 import { Group, Person, Expense, ExpenseSplit, Settlement } from "@/lib/db";
 import {
   calculateBalances,
@@ -10,6 +10,7 @@ import {
   formatCurrency,
   generateWhatsAppMessage,
 } from "@/lib/settlement";
+import { exportToPDF } from "@/lib/pdfExport";
 import { db } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
 
@@ -188,6 +189,23 @@ export function DashboardTab({
               )}
             </button>
           </div>
+
+          <button
+            onClick={() =>
+              exportToPDF({
+                group,
+                persons,
+                expenses,
+                splits,
+                balances,
+                transactions,
+              })
+            }
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700"
+          >
+            <FileText className="h-4 w-4" />
+            Export PDF Summary
+          </button>
 
           <Link
             href={`/groups/${group.id}/close`}
